@@ -1,0 +1,13 @@
+# Arquivos gerados pelo .NET
+bin/
+obj/
+
+# Configurações locais do VS Code
+.vscode/
+
+# Arquivos temporários
+*.user
+*.suo
+
+# Dados locais dos jogadores
+usuarios.json
