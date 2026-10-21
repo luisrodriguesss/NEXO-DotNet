@@ -9,7 +9,9 @@ while (executando)
 {
     Console.WriteLine("\n===== NEXO - LABORATÓRIO DE DECISÕES =====");
     Console.WriteLine("1 - Cadastrar jogador");
-    Console.WriteLine("2 - Sair");
+    Console.WriteLine("2 - Listar jogadores");
+    Console.WriteLine("3 - Buscar jogador");
+    Console.WriteLine("4 - Sair");
     Console.Write("Escolha uma opção: ");
 
     string? opcao = Console.ReadLine();
@@ -41,6 +43,59 @@ while (executando)
             break;
 
         case "2":
+            var jogadores = jogadorService.ListarTodos();
+
+            if (jogadores.Count == 0)
+            {
+                Console.WriteLine("\nNenhum jogador cadastrado.");
+            }
+            else
+            {
+                Console.WriteLine("\n===== JOGADORES =====");
+
+                foreach (var jogador in jogadores)
+                {
+                    Console.WriteLine(
+                        $"ID: {jogador.Id} | " +
+                        $"Usuário: {jogador.NomeUsuario} | " +
+                        $"Apelido: {jogador.Apelido} | " +
+                        $"Cadastro: {jogador.DataCadastro:dd/MM/yyyy}");
+                }
+            }
+            break;
+
+        case "3":
+            try
+            {
+                Console.Write("\nDigite o nome ou apelido: ");
+                string termo = Console.ReadLine() ?? "";
+
+                var resultados = jogadorService.BuscarPorNome(termo);
+
+                if (resultados.Count == 0)
+                {
+                    Console.WriteLine("\nNenhum jogador encontrado.");
+                }
+                else
+                {
+                    Console.WriteLine("\n===== RESULTADOS =====");
+
+                    foreach (var jogador in resultados)
+                    {
+                        Console.WriteLine(
+                            $"ID: {jogador.Id} | " +
+                            $"Usuário: {jogador.NomeUsuario} | " +
+                            $"Apelido: {jogador.Apelido}");
+                    }
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"\nErro: {ex.Message}");
+            }
+            break;
+
+        case "4":
             Console.WriteLine("\nEncerrando o NEXO...");
             executando = false;
             break;

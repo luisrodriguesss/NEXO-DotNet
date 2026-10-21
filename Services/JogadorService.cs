@@ -48,4 +48,30 @@ public class JogadorService
 
         jogadores.Add(novoJogador);
     }
+
+public List<Jogador> ListarTodos()
+{
+    return jogadores.ToList();
+}
+
+public List<Jogador> BuscarPorNome(string termo)
+{
+    if (string.IsNullOrWhiteSpace(termo))
+    {
+        throw new ArgumentException(
+            "Informe um nome para realizar a busca.");
+    }
+
+    termo = termo.Trim();
+
+    return jogadores
+        .Where(j =>
+            j.NomeUsuario.Contains(
+                termo, StringComparison.OrdinalIgnoreCase)
+            ||
+            j.Apelido.Contains(
+                termo, StringComparison.OrdinalIgnoreCase))
+        .ToList();
+}
+
 }
