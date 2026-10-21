@@ -10,4 +10,6 @@ public class Jogador
     public string Apelido { get; set; } = string.Empty;
 
     public DateTime DataCadastro { get; set; } = DateTime.Now;
+
+    public bool Ativo { get; set; } = true;
 }

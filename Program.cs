@@ -28,7 +28,8 @@ while (executando)
     Console.WriteLine("1 - Cadastrar jogador");
     Console.WriteLine("2 - Listar jogadores");
     Console.WriteLine("3 - Buscar jogador");
-    Console.WriteLine("4 - Sair");
+    Console.WriteLine("4 - Alterar status do jogador");
+    Console.WriteLine("5 - Sair");
     Console.Write("Escolha uma opção: ");
 
     string? opcao = Console.ReadLine();
@@ -86,7 +87,8 @@ while (executando)
                         $"ID: {jogador.Id} | " +
                         $"Usuário: {jogador.NomeUsuario} | " +
                         $"Apelido: {jogador.Apelido} | " +
-                        $"Cadastro: {jogador.DataCadastro:dd/MM/yyyy}");
+                        $"Cadastro: {jogador.DataCadastro:dd/MM/yyyy} | " +
+                        $"Status: {(jogador.Ativo ? "Ativo" : "Inativo")}");
                 }
             }
             break;
@@ -112,7 +114,8 @@ while (executando)
                         Console.WriteLine(
                             $"ID: {jogador.Id} | " +
                             $"Usuário: {jogador.NomeUsuario} | " +
-                            $"Apelido: {jogador.Apelido}");
+                            $"Apelido: {jogador.Apelido} | " +
+                            $"Status: {(jogador.Ativo ? "Ativo" : "Inativo")}");
                     }
                 }
             }
@@ -123,6 +126,53 @@ while (executando)
             break;
 
         case "4":
+            try
+            {
+                Console.Write("\nDigite o ID do jogador: ");
+                string entradaId = Console.ReadLine() ?? "";
+
+                if (!int.TryParse(entradaId, out int id) || id <= 0)
+                {
+                    Console.WriteLine("\nID inválido.");
+                    break;
+                }
+
+                Console.WriteLine("\n1 - Ativar jogador");
+                Console.WriteLine("2 - Desativar jogador");
+                Console.Write("Escolha uma opção: ");
+
+                string? escolha = Console.ReadLine();
+
+                if (escolha != "1" && escolha != "2")
+                {
+                    Console.WriteLine("\nOpção inválida.");
+                    break;
+                }
+
+                bool ativo = escolha == "1";
+
+                jogadorService.AlterarStatus(id, ativo);
+
+                Console.WriteLine(
+                    ativo
+                        ? "\nJogador ativado com sucesso!"
+                        : "\nJogador desativado com sucesso!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"\nErro: {ex.Message}");
+            }
+            catch (IOException)
+            {
+                Console.WriteLine("\nErro ao salvar os dados.");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine("\nSem permissão para salvar os dados.");
+            }
+            break;
+
+        case "5":
             Console.WriteLine("\nEncerrando o NEXO...");
             executando = false;
             break;
