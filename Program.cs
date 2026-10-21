@@ -1,7 +1,24 @@
 ﻿
 using NEXO.DotNet.Services;
 
-JogadorService jogadorService = new JogadorService();
+JogadorService jogadorService;
+
+try
+{
+    jogadorService = new JogadorService();
+}
+catch (Exception ex) when (
+    ex is InvalidOperationException ||
+    ex is UnauthorizedAccessException)
+{
+    Console.WriteLine(
+        $"\nErro ao carregar os jogadores: {ex.Message}");
+
+    Console.WriteLine(
+        "Verifique o arquivo usuarios.json e tente novamente.");
+
+    return;
+}
 
 bool executando = true;
 
@@ -39,6 +56,16 @@ while (executando)
             catch (InvalidOperationException ex)
             {
                 Console.WriteLine($"\nErro: {ex.Message}");
+            }
+            catch (IOException)
+            {
+                Console.WriteLine(
+                    "\nErro ao salvar o arquivo de jogadores.");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine(
+                    "\nSem permissão para salvar os jogadores.");
             }
             break;
 
