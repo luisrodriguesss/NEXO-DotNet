@@ -1,11 +1,61 @@
 
+using System.Text.Json;
 using NEXO.DotNet.Models;
 
 namespace NEXO.DotNet.Services;
 
 public class JogadorService
 {
-    private readonly List<Jogador> jogadores = new();
+    private readonly List<Jogador> jogadores;
+    private readonly string caminhoArquivo;
+
+    public JogadorService()
+    {
+        caminhoArquivo = Path.Combine(
+            AppContext.BaseDirectory,
+            "usuarios.json"
+        );
+
+        jogadores = CarregarJogadores();
+    }
+
+    private List<Jogador> CarregarJogadores()
+    {
+        if (!File.Exists(caminhoArquivo))
+        {
+            return new List<Jogador>();
+        }
+
+        try
+        {
+            string json = File.ReadAllText(caminhoArquivo);
+
+            return JsonSerializer.Deserialize<List<Jogador>>(json)
+                   ?? new List<Jogador>();
+        }
+        catch (JsonException ex)
+        {
+            throw new InvalidOperationException(
+                "O arquivo de jogadores contém dados inválidos.", ex);
+        }
+        catch (IOException ex)
+        {
+            throw new InvalidOperationException(
+                "Erro ao ler o arquivo de jogadores.", ex);
+        }
+    }
+
+    private void SalvarJogadores()
+    {
+        var opcoes = new JsonSerializerOptions
+        {
+            WriteIndented = true
+        };
+
+        string json = JsonSerializer.Serialize(jogadores, opcoes);
+
+        File.WriteAllText(caminhoArquivo, json);
+    }
 
     public void Cadastrar(string nomeUsuario, string apelido)
     {
@@ -47,31 +97,40 @@ public class JogadorService
         };
 
         jogadores.Add(novoJogador);
+
+        try
+        {
+            SalvarJogadores();
+        }
+        catch
+        {
+            jogadores.Remove(novoJogador);
+            throw;
+        }
     }
 
-public List<Jogador> ListarTodos()
-{
-    return jogadores.ToList();
-}
-
-public List<Jogador> BuscarPorNome(string termo)
-{
-    if (string.IsNullOrWhiteSpace(termo))
+    public List<Jogador> ListarTodos()
     {
-        throw new ArgumentException(
-            "Informe um nome para realizar a busca.");
+        return jogadores.ToList();
     }
 
-    termo = termo.Trim();
+    public List<Jogador> BuscarPorNome(string termo)
+    {
+        if (string.IsNullOrWhiteSpace(termo))
+        {
+            throw new ArgumentException(
+                "Informe um nome para realizar a busca.");
+        }
 
-    return jogadores
-        .Where(j =>
-            j.NomeUsuario.Contains(
-                termo, StringComparison.OrdinalIgnoreCase)
-            ||
-            j.Apelido.Contains(
-                termo, StringComparison.OrdinalIgnoreCase))
-        .ToList();
-}
+        termo = termo.Trim();
 
+        return jogadores
+            .Where(j =>
+                j.NomeUsuario.Contains(
+                    termo, StringComparison.OrdinalIgnoreCase)
+                ||
+                j.Apelido.Contains(
+                    termo, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+    }
 }
