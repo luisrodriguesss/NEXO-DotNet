@@ -190,4 +190,45 @@ public void AlterarStatus(int id, bool ativo)
     }
 }
 
+public void EditarApelido(int id, string novoApelido)
+{
+    if (string.IsNullOrWhiteSpace(novoApelido))
+    {
+        throw new ArgumentException(
+            "O novo apelido é obrigatório.");
+    }
+
+    Jogador? jogador = jogadores
+        .FirstOrDefault(j => j.Id == id);
+
+    if (jogador == null)
+    {
+        throw new InvalidOperationException(
+            "Jogador não encontrado.");
+    }
+
+    novoApelido = novoApelido.Trim();
+
+    if (jogador.Apelido == novoApelido)
+    {
+        throw new InvalidOperationException(
+            "O novo apelido deve ser diferente do atual.");
+    }
+
+    string apelidoAnterior = jogador.Apelido;
+
+    jogador.Apelido = novoApelido;
+
+    try
+    {
+        SalvarJogadores();
+    }
+    catch
+    {
+        jogador.Apelido = apelidoAnterior;
+        throw;
+    }
+}
+
+
 }

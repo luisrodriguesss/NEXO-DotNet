@@ -29,7 +29,8 @@ while (executando)
     Console.WriteLine("2 - Listar jogadores");
     Console.WriteLine("3 - Buscar jogador");
     Console.WriteLine("4 - Alterar status do jogador");
-    Console.WriteLine("5 - Sair");
+    Console.WriteLine("5 - Editar apelido");
+    Console.WriteLine("6 - Sair");
     Console.Write("Escolha uma opção: ");
 
     string? opcao = Console.ReadLine();
@@ -173,6 +174,44 @@ while (executando)
             break;
 
         case "5":
+            try
+            {
+                Console.Write("\nDigite o ID do jogador: ");
+                string entradaId = Console.ReadLine() ?? "";
+
+                if (!int.TryParse(entradaId, out int id) || id <= 0)
+                {
+                    Console.WriteLine("\nID inválido.");
+                    break;
+                }
+
+                Console.Write("\nDigite o novo apelido: ");
+                string novoApelido = Console.ReadLine() ?? "";
+
+                jogadorService.EditarApelido(id, novoApelido);
+
+                Console.WriteLine(
+                    "\nApelido atualizado com sucesso!");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"\nErro: {ex.Message}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"\nErro: {ex.Message}");
+            }
+            catch (IOException)
+            {
+                Console.WriteLine("\nErro ao salvar os dados.");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine("\nSem permissão para salvar os dados.");
+            }
+            break;
+
+        case "6":
             Console.WriteLine("\nEncerrando o NEXO...");
             executando = false;
             break;
