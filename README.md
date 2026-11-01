@@ -13,6 +13,8 @@
 | [Luis Fillipe Rodrigues Seripieri] | [RM567918] |
 | [Gabriel Rocha de Souza] | [RM567726] |
 | [Luiz Kichimoto Valdevino] | [RM567023] |
+| [Gabriel Stuani] | — |
+| [Guilherme Soares] | — |
 
 **Turma:** [2TDSPB]
 
