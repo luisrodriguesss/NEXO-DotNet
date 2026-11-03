@@ -10,11 +10,11 @@
 
 | Integrante | RM |
 |---|---|
-| [Luis Fillipe Rodrigues Seripieri] | [RM567918] |
-| [Gabriel Rocha de Souza] | [RM567726] |
-| [Luiz Kichimoto Valdevino] | [RM567023] |
-| [Gabriel Stuani] | — |
-| [Guilherme Soares] | — |
+| Luis Fillipe Rodrigues Seripieri | RM567918 |
+| Gabriel Rocha de Souza | RM567726 |
+| Luiz Kichimoto Valdevino | RM567023 |
+| Gabriel Stuani | RM566682 |
+| Guilherme Soares | RM568227 |
 
 **Turma:** [2TDSPB]
 
